@@ -20,8 +20,8 @@ class LoginController extends BaseController
     {
         $credentials = Input::all();
 
-        if($user = Auth::attempt(["username" => $credentials["username"],
-                                  "password" => $credentials["password"]]))
+        if(Auth::attempt(["username" => $credentials["username"],
+                          "password" => $credentials["password"]]))
         {
             $user = Auth::user();
             $language = $user->language;

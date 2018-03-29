@@ -4,6 +4,7 @@ use Auth, Input, Session, Config;
 use View, Response, Redirect;
 use \Illuminate\Filesystem\Filesystem as Filesystem;
 use App\Http\Models\Config\FileLoader as FileLoader;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends BaseController
 {
@@ -54,7 +55,7 @@ class UserController extends BaseController
             $input['password1'] === $input['password2'])
         {
             $user['username'] = $input['username'];
-            $user['password'] = $input['password1'];
+            $user['password'] = Hash::make($input['password1']);
         }
 
         $this->fileLoader->save($config, '', 'kerberos');
@@ -81,10 +82,10 @@ class UserController extends BaseController
 
         $newPassword = null;
 
-        if($input['currentPassword'] === $authedUser->getAuthPassword() &&
+        if(Hash::check($input['currentPassword'], $authedUser->getAuthPassword()) &&
             $input['newPassword1'] === $input['newPassword2'])
         {
-            $newPassword = $input['newPassword1'];
+            $newPassword = Hash::make($input['newPassword1']);
         }
 
         // ----------------------------------
